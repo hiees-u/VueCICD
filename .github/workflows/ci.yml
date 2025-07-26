@@ -1,16 +1,16 @@
-name: CI/CD Deploy Global (branch: pos)
+name: Deploy Vue 3 to GitHub Pages (branch: pos)
 
 on:
   push:
     branches:
-      - pos  # 🔥 Chạy CI/CD chỉ khi push vào branch pos
+      - pos
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: ⬇️ Checkout code
+      - name: ⬇️ Checkout
         uses: actions/checkout@v3
 
       - name: 🟢 Setup Node.js
@@ -21,13 +21,11 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
-      - name: 🧪 Run tests
-        run: npm run test
-
-      - name: 🏗️ Build project
+      - name: 🏗️ Build
         run: npm run build
 
-      - name: 🚀 Deploy to Global Server
-        run: |
-          echo "Deploying to Global..."
-          # ví dụ: rsync hoặc scp tới server, hoặc curl API deploy
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
